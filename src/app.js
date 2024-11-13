@@ -18,8 +18,8 @@ const commentRoutes = require('./routes/comment.routes');
 const postRoutes = require('./routes/post.routes');
 
 // routes init
-app.use('/api/auth', authRoutes);
-app.use('/api/post', postRoutes);
-app.use('/api/comment', commentRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/post', postRoutes);
+app.use('/api/v1/comment', commentRoutes);
 
 module.exports = app;

@@ -1,8 +1,8 @@
 const { Router } = require('express');
 
-const router = Router();
-
 const controller = require('../controllers/comment.controller');
+
+const router = Router();
 
 router.post('/', controller.create);
 

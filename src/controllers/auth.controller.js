@@ -1,19 +1,19 @@
-const bcrypt = require('bcrypt-nodejs');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt-nodejs')
+const jwt = require('jsonwebtoken')
 
-const UserModel = require('../models/user.model');
-const config = require('../config');
+const UserModel = require('../models/user.model')
+const config = require('../config')
 
 module.exports.signIn = async (req, res) => {
     const candidate = await UserModel.findOne({
         email: req.body.email
-    });
+    })
 
     if (candidate) {
         const isPasswordCorrect = bcrypt.compareSync(
             req.body.password,
             candidate.password
-        );
+        )
 
         if (isPasswordCorrect) {
             const token = jwt.sign({
@@ -21,39 +21,39 @@ module.exports.signIn = async (req, res) => {
                 userId: candidate._id,
             }, config.JWT, {
                 expiresIn: 60 * 60,
-            });
-            res.status(200).json({token});
+            })
+            res.status(200).json({token})
         } else {
             res.status(401).json({
                 message: 'Пароль неверный',
-            });
+            })
         }
     } else {
         res.status(404).json({
             message: 'Пользователь не найден',
-        });
+        })
     }
-};
+}
 
-module.exports.createUser = async (req, res) => {
-    const candidate = await User.findOne({
+module.exports.signout = async (req, res) => {
+    const candidate = await UserModel.findOne({
         email: req.body.email
-    });
+    })
 
     if (candidate) {
         res.status(409).json({
             message: 'Такой Email уже занят',
-        });
+        })
     } else {
-        const salt = bcrypt.genSaltSync(10);
+        const salt = bcrypt.genSaltSync(10)
 
         const user = new UserModel({
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, salt),
-        });
+        })
 
-        await user.save();
+        await user.save()
 
-        res.status(201).json(user);
+        res.status(201).json(user)
     }
-};
+}
